@@ -62,8 +62,14 @@ public class CustomerRepositoryTest {
 			System.out.println("customerEntity : " + customerEntity);
 		}
 		
-		CustomerEntity customerFindOne = findAll.stream().filter(c -> c.getName().equals("김철수")).findFirst().orElseThrow(() -> new IllegalArgumentException());
-		List<CustomerEntity> customerFindList = findAll.stream().filter(c -> c.getName().equals("가나다") || c.getName().equals("김철수")).collect(Collectors.toList());
+		CustomerEntity customerFindOne = findAll.stream()
+				.filter(c -> c.getName().equals("김철수"))
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException());
+		
+		List<CustomerEntity> customerFindList = findAll.stream()
+				.filter(c -> c.getName().equals("가나다") || c.getName().equals("김철수"))
+				.collect(Collectors.toList());
 		
 		System.out.println("customerFindOne : " + customerFindOne);
 		System.out.println("customerFindList : " + customerFindList);
