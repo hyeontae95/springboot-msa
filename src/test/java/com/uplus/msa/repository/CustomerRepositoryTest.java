@@ -1,6 +1,7 @@
 package com.uplus.msa.repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -20,8 +21,8 @@ public class CustomerRepositoryTest {
 	@Test @Disabled
 	public void customerTest() {
 		CustomerEntity customerEntity = new CustomerEntity();
-		customerEntity.setName("가나다");
-		customerEntity.setAddress("제주도");
+		customerEntity.setName("철수");
+		customerEntity.setAddress("서울");
 		
 		CustomerEntity saveCustomerEntity = customerRepository.save(customerEntity);
 		System.out.println("saveCustomerEntity" + saveCustomerEntity);
@@ -55,25 +56,52 @@ public class CustomerRepositoryTest {
 		
 	}
 	
-	@Test
+	@Test @Disabled
 	public void customerFindAll() {
 		List<CustomerEntity> findAll = customerRepository.findAll();
-		for(CustomerEntity customerEntity : findAll) {
-			System.out.println("customerEntity : " + customerEntity);
-		}
 		
-		CustomerEntity customerFindOne = findAll.stream()
-				.filter(c -> c.getName().equals("김철수"))
-				.findFirst()
-				.orElseThrow(() -> new IllegalArgumentException());
+		// Lambda
+		findAll.forEach(customerEntity -> System.out.println(customerEntity));
 		
-		List<CustomerEntity> customerFindList = findAll.stream()
-				.filter(c -> c.getName().equals("가나다") || c.getName().equals("김철수"))
+		// method reference
+		findAll.forEach(System.out::println);
+//		for(CustomerEntity customerEntity : findAll) {
+//			System.out.println("customerEntity : " + customerEntity);
+//		}
+		
+//		CustomerEntity customerFindOne = findAll.stream()
+//				.filter(c -> c.getName().equals("김철수"))
+//				.findFirst()
+//				.orElseThrow(() -> new IllegalArgumentException());
+//		
+//		List<CustomerEntity> customerFindList = findAll.stream()
+//				.filter(c -> c.getName().equals("가나다") || c.getName().equals("김철수"))
+//				.collect(Collectors.toList());
+//		
+//		System.out.println("customerFindOne : " + customerFindOne);
+//		System.out.println("customerFindList : " + customerFindList);
+		
+	}
+	
+	@Test @Disabled
+	public void setterTest() { 
+		Optional<CustomerEntity> customerFindById = customerRepository.findById(1L);
+		CustomerEntity customerEntity = customerFindById.get();
+		
+		customerEntity.setName("길동");
+		
+		customerRepository.save(customerEntity);
+		
+	}
+	
+	@Test
+	public void streamTest() {
+		List<CustomerEntity> customerFilterList = customerRepository.findAll()
+				.stream()
+				.filter(c -> !c.getAddress().isEmpty())
 				.collect(Collectors.toList());
 		
-		System.out.println("customerFindOne : " + customerFindOne);
-		System.out.println("customerFindList : " + customerFindList);
-		
+		customerFilterList.forEach(customerEntity -> System.out.println("customerEntity : " + customerEntity));
 	}
 	
 }
