@@ -3,7 +3,7 @@ package com.uplus.msa.repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -96,12 +96,23 @@ public class CustomerRepositoryTest {
 	
 	@Test
 	public void streamTest() {
-		List<CustomerEntity> customerFilterList = customerRepository.findAll()
-				.stream()
-				.filter(c -> !c.getAddress().isEmpty())
-				.collect(Collectors.toList());
+//		List<CustomerEntity> customerFilterList = customerRepository.findAll()
+//				.stream()
+//				.filter(c -> !c.getAddress().isEmpty())
+//				.collect(Collectors.toList());
+//		
+//		customerFilterList.forEach(customerEntity -> System.out.println("customerEntity : " + customerEntity));
 		
-		customerFilterList.forEach(customerEntity -> System.out.println("customerEntity : " + customerEntity));
+//		List<String> customerFilterList = customerRepository.findAll()
+//				.stream()
+//				.map(c -> c.getName())
+//				.collect(Collectors.toList());
+//		
+//		customerFilterList.forEach(customerMapEntity -> System.out.println("customerMapEntity : " + customerMapEntity));
+		
+		List<CustomerEntity> collect = customerRepository.findAll().stream().filter(c -> c.getId() < 2).collect(toList());
+		collect.forEach(c -> System.out.println(c));
+		
 	}
 	
 }
