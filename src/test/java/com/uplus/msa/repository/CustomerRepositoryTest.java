@@ -17,11 +17,11 @@ public class CustomerRepositoryTest {
 	@Autowired
 	private CustomerRepository customerRepository;
 	
-	@Test @Disabled
+	@Test
 	public void customerTest() {
 		CustomerEntity customerEntity = new CustomerEntity();
-		customerEntity.setName("철수");
-		customerEntity.setAddress("서울");
+		customerEntity.setName("훈이");
+		customerEntity.setAddress("인천");
 		
 		CustomerEntity saveCustomerEntity = customerRepository.save(customerEntity);
 		System.out.println("saveCustomerEntity" + saveCustomerEntity);
@@ -93,7 +93,7 @@ public class CustomerRepositoryTest {
 		
 	}
 	
-	@Test
+	@Test @Disabled
 	public void streamTest() {
 		List<CustomerEntity> customerFilterList = customerRepository.findAll()
 				.stream()
