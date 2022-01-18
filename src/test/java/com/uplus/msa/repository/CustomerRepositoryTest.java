@@ -20,6 +20,7 @@ public class CustomerRepositoryTest {
 	@Test
 	public void customerTest() {
 		CustomerEntity customerEntity = new CustomerEntity();
+		customerEntity.setId(6L);
 		customerEntity.setName("AA");
 		customerEntity.setAddress("BB");
 		

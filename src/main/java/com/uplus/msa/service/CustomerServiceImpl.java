@@ -121,6 +121,7 @@ public class CustomerServiceImpl implements CustomerService {
 						   .collect(Collectors.toList());						   
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public ResponseEntity<?> updateCustomer(CustomerDTO customerDTO) throws Exception {
 		Optional<CustomerEntity> customerID = customerRepository.findById(customerDTO.getId());
