@@ -2,6 +2,9 @@ package com.uplus.msa.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+
 import com.uplus.msa.dto.CustomerDTO;
 
 public interface CustomerService {
@@ -13,5 +16,10 @@ public interface CustomerService {
 	
 	Long createCustomer(CustomerDTO custmerDTO) throws Exception;
 	
+	ResponseEntity<?> getCustomerByIdRE(Long id) throws Exception;
+
+	List<CustomerDTO> getCustomerByIdList(List<Long> ids) throws Exception;
+	
+	List<CustomerDTO> getCustomersPaing(Pageable pageable) throws Exception;
 	
 }

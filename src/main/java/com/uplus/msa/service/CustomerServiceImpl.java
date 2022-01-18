@@ -2,10 +2,15 @@ package com.uplus.msa.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 	
-	private final CustomerRepository repository;
+	private final CustomerRepository customerRepository;
 	private final ModelMapper modelMapper;
 	
 	//constructor injection
@@ -31,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public List<CustomerDTO> getAllCustomers() throws Exception {
-		List<CustomerEntity> customerList = repository.findAll();
+		List<CustomerEntity> customerList = customerRepository.findAll();
 		//1. 직접매핑하기
 //		List<CustomerDTO> dtoList = new ArrayList<>();
 //		for (Customer customer : customerList) {
@@ -59,7 +64,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public CustomerDTO getCustomerById(Long id) throws Exception {
-		CustomerEntity customerEntity = repository.findById(id).orElseGet(() -> new CustomerEntity());
+		CustomerEntity customerEntity = customerRepository.findById(id).orElseGet(() -> new CustomerEntity());
 		//1.직접매핑하기
 //		CustomerDTO customerDTO = CustomerDTO.builder()
 //					.id(customer.getId())
@@ -84,8 +89,35 @@ public class CustomerServiceImpl implements CustomerService {
 	public Long createCustomer(CustomerDTO customerDTO) throws Exception {
 		//CustomerDTO -> Customer 매핑
 		CustomerEntity customerEntity = modelMapper.map(customerDTO, CustomerEntity.class);
-		CustomerEntity savedCustomerEntity = repository.save(customerEntity);
+		CustomerEntity savedCustomerEntity = customerRepository.save(customerEntity);
 		return savedCustomerEntity.getId();
+	}
+
+	@Override
+	public ResponseEntity<?> getCustomerByIdRE(Long id) throws Exception {
+		Optional<CustomerEntity> findById = customerRepository.findById(id);
+		if(!findById.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		CustomerEntity customerEntity = findById.get();
+		CustomerDTO customerDTO = modelMapper.map(customerEntity, CustomerDTO.class);
+		return ResponseEntity.ok(customerDTO);
+	}
+	
+	@Override
+	public List<CustomerDTO> getCustomerByIdList(List<Long> ids) throws Exception {
+		return customerRepository.findByIdIn(ids) //List<Customer>
+						.stream()	//Stream<Customer>
+						.map(cust -> modelMapper.map(cust, CustomerDTO.class)) //Stream<CustomerDTO>
+						.collect(Collectors.toList()); //List<CustomerDTO>						
+	}
+	
+	@Override
+	public List<CustomerDTO> getCustomersPaing(Pageable pageable) throws Exception {
+		Page<CustomerEntity> customerPage = customerRepository.findAll(pageable);
+		return customerPage.get() //Stream<Customer>
+						   .map(cust -> modelMapper.map(cust, CustomerDTO.class)) //Stream<CustomerDTO>
+						   .collect(Collectors.toList());						   
 	}
 	
 }
