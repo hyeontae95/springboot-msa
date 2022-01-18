@@ -14,12 +14,14 @@ public interface CustomerService {
 	//Customer 하나 조회
 	public CustomerDTO getCustomerById(Long id) throws Exception;
 	
-	Long createCustomer(CustomerDTO custmerDTO) throws Exception;
+	Long createCustomer(CustomerDTO customerDTO) throws Exception;
 	
 	ResponseEntity<?> getCustomerByIdRE(Long id) throws Exception;
 
 	List<CustomerDTO> getCustomerByIdList(List<Long> ids) throws Exception;
 	
 	List<CustomerDTO> getCustomersPaing(Pageable pageable) throws Exception;
+	
+	ResponseEntity<?> updateCustomer(CustomerDTO customerDTO) throws Exception;
 	
 }

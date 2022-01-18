@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.uplus.msa.dto.CustomerDTO;
 import com.uplus.msa.entity.CustomerEntity;
@@ -118,6 +119,29 @@ public class CustomerServiceImpl implements CustomerService {
 		return customerPage.get() //Stream<Customer>
 						   .map(cust -> modelMapper.map(cust, CustomerDTO.class)) //Stream<CustomerDTO>
 						   .collect(Collectors.toList());						   
+	}
+
+	@Override
+	public ResponseEntity<?> updateCustomer(CustomerDTO customerDTO) throws Exception {
+		Optional<CustomerEntity> customerID = customerRepository.findById(customerDTO.getId());
+		if(!customerID.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(customerDTO.getId() + " customer not found");
+		}
+		
+		CustomerEntity customerEntity = customerID.get();
+		
+		if(!StringUtils.isEmpty(customerDTO.getName())) {
+			customerEntity.setName(customerDTO.getName());
+		}
+		if(!StringUtils.isEmpty(customerDTO.getAddress())) {
+			customerEntity.setAddress(customerDTO.getAddress());
+		}
+		
+		CustomerEntity updatedCustomer = customerRepository.save(customerEntity);
+		
+		CustomerDTO customer = modelMapper.map(updatedCustomer, CustomerDTO.class);
+		
+		return ResponseEntity.ok(customer);
 	}
 	
 }

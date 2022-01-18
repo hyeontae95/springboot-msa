@@ -20,8 +20,8 @@ public class CustomerRepositoryTest {
 	@Test
 	public void customerTest() {
 		CustomerEntity customerEntity = new CustomerEntity();
-		customerEntity.setName("훈이");
-		customerEntity.setAddress("인천");
+		customerEntity.setName("AA");
+		customerEntity.setAddress("BB");
 		
 		CustomerEntity saveCustomerEntity = customerRepository.save(customerEntity);
 		System.out.println("saveCustomerEntity" + saveCustomerEntity);

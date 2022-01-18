@@ -12,5 +12,5 @@ public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> 
 	Optional<CustomerEntity> findByName(String name);
 	
 	List<CustomerEntity> findByIdIn(List<Long> ids);
-	
+		
 }
